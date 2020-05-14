@@ -3,12 +3,14 @@ import re
 
 import scrapy
 from scrapy import Spider,FormRequest,Request
+from weibosearch.items import WeibosearchItem
+
 
 class WeiboSpider(scrapy.Spider):
     name = 'weibo'
     allowed_domains = ['weibo.cn']
     search_url= 'https://weibo.cn/search/mblog'
-    max_page=100
+    max_page=8
 
     def start_requests(self):
         keyword='Kobe'
@@ -39,3 +41,12 @@ class WeiboSpider(scrapy.Spider):
         like_count = response.xpath('//a[contains(., "赞[")]//text()').re_first('赞\[(.*?)\]')
         posted_at = response.xpath('//div[@id="M_"]//span[@class="ct"]//text()').extract_first(default=None)
         user = response.xpath('//div[@id="M_"]/div[1]/a/text()').extract_first()
+        print(comment_count,forward_count,like_count,posted_at,user)
+
+        weibosearch_item=WeibosearchItem()
+        for field in weibosearch_item.fields:
+            try:
+                weibosearch_item[field]=eval(field)
+            except NameError:
+                self.logger.debug('Field is not Defined '+field)
+        yield weibosearch_item

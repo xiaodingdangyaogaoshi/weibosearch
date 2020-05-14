@@ -74,9 +74,10 @@ DOWNLOADER_MIDDLEWARES = {
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'weibosearch.pipelines.WeibosearchPipeline': 300,
-#}
+ITEM_PIPELINES = {
+    'weibosearch.pipelines.WeibosearchPipeline': 300,
+    'weibosearch.pipelines.MongoPipeline': 301,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
@@ -101,3 +102,6 @@ DOWNLOADER_MIDDLEWARES = {
 
 COOKIES_POOL_URL='http://127.0.0.1:5000/weibo/random'
 HTTPERROR_ALLOWED_CODES = [404]
+
+MONGO_URI = 'localhost'
+MONGO_DATABASE = 'weibo'
